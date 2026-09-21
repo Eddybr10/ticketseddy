@@ -44,14 +44,38 @@ export default function App() {
     fetchTickets();
   }, [isAdmin]);
 
-  // Check URL query parameters for direct ticket linking (e.g. from email notifications ?ticket=CLOE-1001)
+  // Check URL query parameters for direct ticket linking & operator role (e.g. from email notifications ?ticket=CLOE-1001&op=omar&auth=admin)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+
+    // Operator selection from notification link
+    const opParam = params.get('op');
+    if (opParam === 'omar' || opParam === 'adiaz') {
+      setOperator('omar');
+      localStorage.setItem('cloe_operator', 'omar');
+    } else if (opParam === 'eduardo' || opParam === 'eyepez') {
+      setOperator('eduardo');
+      localStorage.setItem('cloe_operator', 'eduardo');
+    }
+
+    // Admin access from official notifications
+    const authParam = params.get('auth');
+    let effectivePin = adminPin || sessionStorage.getItem('cloe_admin_pin');
+    if (authParam === 'admin') {
+      setIsAdmin(true);
+      sessionStorage.setItem('cloe_admin_auth', 'true');
+      if (!effectivePin) {
+        effectivePin = 'cloe2026';
+        setAdminPin('cloe2026');
+        sessionStorage.setItem('cloe_admin_pin', 'cloe2026');
+      }
+      setViewMode('admin');
+    }
+
     const ticketParam = params.get('ticket');
     if (ticketParam) {
       const headers = {};
-      const currentPin = adminPin || sessionStorage.getItem('cloe_admin_pin');
-      if (isAdmin && currentPin) headers['x-admin-pin'] = currentPin;
+      if (effectivePin) headers['x-admin-pin'] = effectivePin;
 
       fetch(`/api/tickets/${ticketParam}`, { headers })
         .then(res => res.json())

@@ -203,7 +203,7 @@ export default function Navbar({
                   border: `1px solid ${operator === 'omar' ? '#9333EA' : '#0284C7'}`
                 }}
               >
-                <span>{operator === 'omar' ? '🔍 Omar (QA)' : '💻 Eduardo (Dev)'}</span>
+                <span>{operator === 'omar' ? '🔍 Omar Díaz (QA)' : '💻 Eduardo (Dev)'}</span>
               </button>
             )}
           </div>

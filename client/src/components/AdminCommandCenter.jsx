@@ -146,7 +146,7 @@ export default function AdminCommandCenter({
               title="Alternar rol activo entre Eduardo y Omar"
             >
               {operator === 'omar' ? <Shield size={12} /> : <Terminal size={12} />}
-              <span>{operator === 'omar' ? '🔍 Omar (QA / Tester)' : '💻 Eduardo (Desarrollador)'}</span>
+              <span>{operator === 'omar' ? '🔍 Omar Díaz (QA / Tester)' : '💻 Eduardo (Desarrollador)'}</span>
             </button>
 
             <button

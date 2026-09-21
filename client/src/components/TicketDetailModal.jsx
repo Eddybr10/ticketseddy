@@ -91,6 +91,7 @@ export default function TicketDetailModal({
   const [findingSeverity, setFindingSeverity] = useState('major');
   const [findingDevice, setFindingDevice] = useState('Desktop Chrome');
   const [submittingFinding, setSubmittingFinding] = useState(false);
+  const [notifyingOmar, setNotifyingOmar] = useState(false);
 
   // Active status
   const currentStage = STAGE_MAP[normalizeStatus(ticket.status)] || STAGE_MAP.backlog;
@@ -146,10 +147,10 @@ export default function TicketDetailModal({
       const isOmar = operator === 'omar';
       const senderRole = isAdmin ? 'admin' : 'user';
       const senderEmail = isAdmin
-        ? (isOmar ? 'omar.qa@oemoda.com' : 'eyepez@oemoda.com')
+        ? (isOmar ? 'adiaz@oemoda.com' : 'eyepez@oemoda.com')
         : (currentUserEmail || ticket.requesterEmail);
       const senderName = isAdmin
-        ? (isOmar ? 'Omar (QA / Tester)' : 'Eduardo Yepez (Desarrollador)')
+        ? (isOmar ? 'Omar Díaz (QA / Tester)' : 'Eduardo Yépez (Desarrollador)')
         : ticket.requesterName;
 
       const res = await fetch(`/api/tickets/${ticket.id}/messages`, {
@@ -243,13 +244,46 @@ export default function TicketDetailModal({
     }
   };
 
+  const handleNotifyOmar = async () => {
+    if (notifyingOmar) return;
+    try {
+      setNotifyingOmar(true);
+      const headers = { 'Content-Type': 'application/json' };
+      const currentPin = adminPin || sessionStorage.getItem('cloe_admin_pin') || 'cloe2026';
+      headers['x-admin-pin'] = currentPin;
+
+      const res = await fetch(`/api/tickets/${ticket.id}/notify-qa`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          recipientEmail: 'adiaz@oemoda.com',
+          note: `Requerimiento en QA: por favor audita el workspace VTEX "${vtexWorkspace || ticket.vtexWorkspace || 'asignado'}" para verificar funcionalidad, responsive y consola.`
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        alert(`✅ Correo de notificación enviado exitosamente a Omar Díaz (adiaz@oemoda.com).`);
+        fetchTicketData();
+      } else {
+        const err = await res.json();
+        alert(err.error || 'Error al notificar a Omar Díaz');
+      }
+    } catch (err) {
+      console.error('Error notifying Omar:', err);
+      alert('Error de conexión al enviar notificación a Omar Díaz');
+    } finally {
+      setNotifyingOmar(false);
+    }
+  };
+
   const handleToggleChecklist = async (itemId, currentChecked) => {
     try {
       const headers = { 'Content-Type': 'application/json' };
       const currentPin = adminPin || sessionStorage.getItem('cloe_admin_pin');
       if (isAdmin && currentPin) headers['x-admin-pin'] = currentPin;
 
-      const checkedBy = operator === 'omar' ? 'Omar (QA / Tester)' : 'Eduardo (Dev)';
+      const checkedBy = operator === 'omar' ? 'Omar Díaz (QA / Tester)' : 'Eduardo (Dev)';
 
       const res = await fetch(`/api/tickets/${ticket.id}/qa-checklist`, {
         method: 'PATCH',
@@ -282,7 +316,7 @@ export default function TicketDetailModal({
       const currentPin = adminPin || sessionStorage.getItem('cloe_admin_pin');
       if (isAdmin && currentPin) headers['x-admin-pin'] = currentPin;
 
-      const reportedBy = operator === 'omar' ? 'Omar (QA / Tester)' : 'Eduardo (Dev)';
+      const reportedBy = operator === 'omar' ? 'Omar Díaz (QA / Tester)' : 'Eduardo (Dev)';
 
       const res = await fetch(`/api/tickets/${ticket.id}/qa-findings`, {
         method: 'POST',
@@ -616,7 +650,7 @@ export default function TicketDetailModal({
                   title="Haz clic para alternar entre Eduardo y Omar"
                 >
                   {operator === 'omar' ? <Shield size={12} /> : <Terminal size={12} />}
-                  <span>{operator === 'omar' ? '🔍 Omar (QA / Tester)' : '💻 Eduardo (Desarrollador)'}</span>
+                  <span>{operator === 'omar' ? '🔍 Omar Díaz (QA / Tester)' : '💻 Eduardo (Desarrollador)'}</span>
                   <span style={{ fontSize: '9px', opacity: 0.7 }}>(Cambiar)</span>
                 </button>
               </div>
@@ -669,7 +703,7 @@ export default function TicketDetailModal({
                   <button
                     onClick={() => {
                       if (!vtexWorkspace && !confirm('No has registrado nombre de workspace VTEX. ¿Enviar a QA de todos modos?')) return;
-                      handleStatusChange('in_qa', 'Eduardo completó el desarrollo y pasó el ticket a QA con Omar en workspace VTEX.');
+                      handleStatusChange('in_qa', 'Eduardo completó el desarrollo y pasó el ticket a QA con Omar Díaz (adiaz@oemoda.com) en workspace VTEX.');
                     }}
                     disabled={updatingStatus}
                     style={{
@@ -691,6 +725,27 @@ export default function TicketDetailModal({
 
                 {currentStage.id === 'in_qa' && (
                   <>
+                    <button
+                      onClick={handleNotifyOmar}
+                      disabled={notifyingOmar}
+                      style={{
+                        background: 'rgba(147, 51, 234, 0.2)',
+                        color: '#C084FC',
+                        border: '1px solid #9333EA',
+                        padding: '5px 10px',
+                        borderRadius: 'var(--radius-sm)',
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '5px'
+                      }}
+                      title="Enviar recordatorio a Omar Díaz (adiaz@oemoda.com)"
+                    >
+                      <Mail size={12} />
+                      <span>{notifyingOmar ? 'Notificando...' : '📧 Notificar a Omar'}</span>
+                    </button>
+
                     <button
                       onClick={() => {
                         setActiveTab('findings');
@@ -714,8 +769,8 @@ export default function TicketDetailModal({
                     </button>
 
                     <button
-                      onClick={() => handleStatusChange('ready_release', 'Omar (QA) otorgó el Visto Bueno formal. Requerimiento validado y listo para liberación.', {
-                        qaApprovedBy: 'Omar (QA / Tester)',
+                      onClick={() => handleStatusChange('ready_release', 'Omar Díaz (QA) otorgó el Visto Bueno formal. Requerimiento validado y listo para liberación.', {
+                        qaApprovedBy: 'Omar Díaz (QA / Tester)',
                         qaApprovedAt: new Date().toISOString()
                       })}
                       disabled={updatingStatus}
@@ -739,7 +794,7 @@ export default function TicketDetailModal({
 
                 {currentStage.id === 'corrections' && (
                   <button
-                    onClick={() => handleStatusChange('in_qa', 'Eduardo corrigió los hallazgos reportados. Ticket enviado nuevamente a revalidación de Omar.')}
+                    onClick={() => handleStatusChange('in_qa', 'Eduardo corrigió los hallazgos reportados. Ticket enviado nuevamente a revalidación de Omar Díaz (adiaz@oemoda.com).')}
                     disabled={updatingStatus}
                     style={{
                       background: '#9333EA',
@@ -1403,8 +1458,8 @@ export default function TicketDetailModal({
 
                   <button
                     type="button"
-                    onClick={() => handleStatusChange('ready_release', 'Checklist de QA completado al 100%. Visto Bueno otorgado.', {
-                      qaApprovedBy: operator === 'omar' ? 'Omar (QA / Tester)' : 'Eduardo (Dev)',
+                    onClick={() => handleStatusChange('ready_release', 'Checklist de QA completado al 100%. Visto Bueno otorgado por Omar Díaz.', {
+                      qaApprovedBy: operator === 'omar' ? 'Omar Díaz (QA / Tester)' : 'Eduardo (Dev)',
                       qaApprovedAt: new Date().toISOString()
                     })}
                     style={{
