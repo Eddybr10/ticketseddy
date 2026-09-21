@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: cloe-tickets-system
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm --prefix client install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_PIN
+        generateValue: false
+        value: cloe2026
+      # Configura tus credenciales corporativas en las variables de entorno de Render:
+      # - key: M365_USER
+      #   value: soporte.ecommerce@oemoda.com
+      # - key: M365_PASS
+      #   sync: false

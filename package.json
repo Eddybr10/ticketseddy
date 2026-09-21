@@ -1,0 +1,32 @@
+{
+  "name": "cloe-tickets-system",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "dev:server": "node server/index.js",
+    "dev:client": "npm run --prefix client dev",
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"cyan,magenta\" \"node server/index.js\" \"npm run --prefix client dev\"",
+    "build": "npm run --prefix client build",
+    "start": "node server/index.js"
+  },
+  "keywords": [
+    "cloe",
+    "vtex",
+    "tickets",
+    "support",
+    "ecommerce"
+  ],
+  "author": "Solo Dev Cloe",
+  "license": "ISC",
+  "description": "Sistema Integral de Tickets y Soporte Técnico para Cloe Moda (cloe.com.mx y Cloe Factory Store)",
+  "dependencies": {
+    "concurrently": "^9.1.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.10.0",
+    "uuid": "^11.1.0"
+  }
+}

@@ -1,0 +1,332 @@
+:root {
+  /* Minimalist & Professional Clean Palette (Dark Slate by default) */
+  --bg-main: #0B0F19;
+  --bg-surface: #111827;
+  --bg-surface-elevated: #1F2937;
+  --bg-glass: rgba(17, 24, 39, 0.92);
+  --bg-glass-card: #111827;
+  --bg-hover: rgba(255, 255, 255, 0.05);
+
+  --border-subtle: #1F2937;
+  --border-medium: #374151;
+  --border-focus: #3B82F6;
+
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+
+  /* Clean Corporate Primary Accent (Blue) */
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-subtle: rgba(37, 99, 235, 0.12);
+
+  /* CLOE 8-Stage Workflow Colors (From Official Blueprint) */
+  --stage-backlog: #64748B;
+  --stage-backlog-bg: rgba(100, 116, 139, 0.14);
+  --stage-planned: #8B5CF6;
+  --stage-planned-bg: rgba(139, 92, 246, 0.14);
+  --stage-dev: #0284C7;
+  --stage-dev-bg: rgba(2, 132, 199, 0.14);
+  --stage-qa: #9333EA;
+  --stage-qa-bg: rgba(147, 51, 234, 0.14);
+  --stage-corrections: #D97706;
+  --stage-corrections-bg: rgba(217, 119, 6, 0.14);
+  --stage-ready-prod: #059669;
+  --stage-ready-prod-bg: rgba(5, 150, 105, 0.14);
+  --stage-monitoring: #4F46E5;
+  --stage-monitoring-bg: rgba(79, 70, 229, 0.14);
+  --stage-closed: #475569;
+  --stage-closed-bg: rgba(71, 85, 105, 0.14);
+
+  /* Status Colors (Legacy & Fallback mapping) */
+  --status-new: var(--stage-backlog);
+  --status-new-bg: var(--stage-backlog-bg);
+  --status-triaged: var(--stage-planned);
+  --status-triaged-bg: var(--stage-planned-bg);
+  --status-progress: var(--stage-dev);
+  --status-progress-bg: var(--stage-dev-bg);
+  --status-testing: var(--stage-qa);
+  --status-testing-bg: var(--stage-qa-bg);
+  --status-resolved: var(--stage-ready-prod);
+  --status-resolved-bg: var(--stage-ready-prod-bg);
+  --status-closed: var(--stage-closed);
+  --status-closed-bg: var(--stage-closed-bg);
+
+  /* Priority Tokens */
+  --priority-p1: #EF4444;
+  --priority-p1-bg: rgba(239, 68, 68, 0.12);
+  --priority-p2: #F97316;
+  --priority-p2-bg: rgba(249, 115, 22, 0.12);
+  --priority-p3: #EAB308;
+  --priority-p3-bg: rgba(234, 179, 8, 0.12);
+  --priority-p4: #3B82F6;
+  --priority-p4-bg: rgba(59, 130, 246, 0.12);
+
+  /* Clean Standard Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Clean Subtle Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+}
+
+/* Light Mode: Clean White / Crisp Minimalist */
+[data-theme="light"] {
+  --bg-main: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #F1F5F9;
+  --bg-glass: rgba(255, 255, 255, 0.95);
+  --bg-glass-card: #FFFFFF;
+  --bg-hover: rgba(0, 0, 0, 0.04);
+
+  --border-subtle: #E2E8F0;
+  --border-medium: #CBD5E1;
+  --border-focus: #2563EB;
+
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  font-size: 14px;
+}
+
+/* Standard Clean Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-subtle);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Minimalist Clean Surfaces */
+.glass-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+}
+
+.glass-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.glass-card:hover {
+  border-color: var(--border-medium);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================
+   Mobile First Responsive Design & Touch Utilities
+   ============================================================ */
+
+/* Hide / Show Utilities */
+.show-mobile {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+  .show-mobile {
+    display: flex !important;
+  }
+  .show-mobile-block {
+    display: block !important;
+  }
+
+  /* Prevent iOS input zoom by enforcing 16px font size on small screens */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Comfortable Mobile Touch Targets */
+  button, a, select, input {
+    min-height: 40px;
+  }
+
+  /* Smooth Touch Scrolling without Ugly Scrollbars */
+  .mobile-scroll-x {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 8px;
+    padding-bottom: 4px;
+  }
+  .mobile-scroll-x::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Full Screen / Bottom Sheet Modals on Mobile */
+  .modal-overlay-mobile {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+
+  .modal-content-mobile {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 94vh !important;
+    max-height: 94vh !important;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+    margin: 0 !important;
+    border-bottom: none !important;
+  }
+
+  /* Floating Action Button (FAB) for Mobile */
+  .mobile-fab-btn {
+    position: fixed;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    right: 20px;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary);
+    color: #ffffff;
+    padding: 12px 20px;
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Responsive grid layouts */
+  .mobile-grid-1col {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Kanban Mobile Column Management */
+  .kanban-desktop-grid {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .kanban-column {
+    display: none !important;
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+  .kanban-column.active-mobile-col {
+    display: flex !important;
+  }
+
+  /* Responsive Hero */
+  .mobile-hero-stack {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  /* Sticky Modal Footer on Mobile */
+  .modal-mobile-sticky-footer {
+    position: sticky !important;
+    bottom: 0 !important;
+    background: var(--bg-surface-elevated) !important;
+    border-top: 1px solid var(--border-subtle) !important;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 10 !important;
+  }
+
+  /* Responsive Navbar */
+  .app-navbar {
+    padding: 0 10px !important;
+  }
+  .app-navbar-inner {
+    gap: 4px !important;
+  }
+  .app-navbar-logo {
+    height: 17px !important;
+    max-width: 68px !important;
+    object-fit: contain !important;
+  }
+  .app-navbar-btn-group {
+    gap: 3px !important;
+  }
+  .app-navbar-btn {
+    padding: 6px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .kanban-desktop-grid {
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(260px, 1fr)) !important;
+  }
+  .kanban-column {
+    display: flex !important;
+  }
+}
+
