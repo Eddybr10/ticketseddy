@@ -11,10 +11,10 @@ import {
 export default function EmailDrawer({ onClose, onEmailProcessed, tickets = [], adminPin = '' }) {
   const [emails, setEmails] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [simTicketId, setSimTicketId] = useState(tickets[0]?.id || 'CLOE-1001');
-  const [simSenderName, setSimSenderName] = useState('Mariana López');
-  const [simSenderEmail, setSimSenderEmail] = useState('mariana.lopez@oemoda.com');
-  const [simReplyText, setSimReplyText] = useState('Hola! Ya revisé en el checkout y el descuento ya pasa correctamente. Muchas gracias!');
+  const [simTicketId, setSimTicketId] = useState(tickets[0]?.id || '');
+  const [simSenderName, setSimSenderName] = useState('');
+  const [simSenderEmail, setSimSenderEmail] = useState('');
+  const [simReplyText, setSimReplyText] = useState('');
   const [simulating, setSimulating] = useState(false);
   const [simResult, setSimResult] = useState(null);
 
